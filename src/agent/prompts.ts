@@ -70,3 +70,11 @@ Optional: startBinding, endBinding, startArrowhead, endArrowhead ("arrow" for fi
 \`\`\`
 
 Now generate a diagram for the description provided by the user. Return only the JSON — no explanation.`;
+
+export const UPDATE_SYSTEM_PROMPT = `You are a diagram editor. You will receive the current Excalidraw elements of a diagram as JSON, plus a plain-English description of the changes to apply.
+
+Return the complete updated elements array — including all unchanged elements plus any new or modified ones. Do not drop existing elements unless the change explicitly asks to remove them.
+
+Follow the same coordinate system, element types, ID rules, and layout conventions as if you were creating a new diagram. Existing element IDs must be preserved exactly. New elements must have unique string IDs that don't clash with existing ones.
+
+Return only the JSON — no explanation.`;
