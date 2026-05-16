@@ -8,6 +8,7 @@
     "test:connection": "tsx test-connection.ts",
     "test:gemini": "tsx test-gemini.ts",
     "mcp:server": "tsx src/mcp-server/index.ts",
+    "test:mcp-client": "tsx test-mcp-client.ts",
     "dev": "tsx"
   },
   "keywords": [],
