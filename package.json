@@ -1,0 +1,25 @@
+{
+  "name": "vizard",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/cli.js",
+  "scripts": {
+    "build": "tsc",
+    "test:connection": "tsx test-connection.ts",
+    "test:gemini": "tsx test-gemini.ts",
+    "dev": "tsx"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "CLI + MCP server that generates Excalidraw diagrams from plain-English descriptions using Gemini",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.7.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
