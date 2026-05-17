@@ -3,11 +3,9 @@ import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { diagramResponseSchema } from "../../agent/schema.js";
 import { SYSTEM_PROMPT } from "../../agent/prompts.js";
-import {
-  buildExcalidrawFile,
-  withDefaults,
-  type ExcalidrawElement,
-} from "../../utils/excalidraw.js";
+import { buildExcalidrawFile } from "../../utils/excalidraw.js";
+import { generateWithRetry } from "../../utils/generate-with-retry.js";
+import { toSvg } from "../../utils/svg.js";
 
 export type DiagramStyle = "flowchart" | "sequence" | "architecture";
 
@@ -18,6 +16,7 @@ export interface CreateDiagramInput {
 
 export interface CreateDiagramOutput {
   filePath: string;
+  svgPath: string;
   elementCount: number;
 }
 
@@ -47,20 +46,19 @@ export async function createDiagram({
   });
 
   const prompt = `Style: ${style}\n\n${description}`;
-  const result = await model.generateContent(prompt);
-  const parsed = JSON.parse(result.response.text()) as {
-    elements: Partial<ExcalidrawElement>[];
-  };
-
-  const elements = parsed.elements.map((el) =>
-    withDefaults(el as Parameters<typeof withDefaults>[0])
-  );
+  const elements = await generateWithRetry(model, prompt, "[create_diagram]");
 
   await mkdir("diagrams", { recursive: true });
-  const filename = `${slugify(description)}-${Date.now()}.excalidraw`;
-  const filePath = join("diagrams", filename);
-  await writeFile(filePath, JSON.stringify(buildExcalidrawFile(elements), null, 2), "utf-8");
+  const base = `${slugify(description)}-${Date.now()}`;
+  const filePath = join("diagrams", `${base}.excalidraw`);
+  const svgPath = join("diagrams", `${base}.svg`);
 
-  console.error(`[create_diagram] saved ${filePath} (${elements.length} elements)`);
-  return { filePath, elementCount: elements.length };
+  const excalidrawFile = buildExcalidrawFile(elements);
+  await Promise.all([
+    writeFile(filePath, JSON.stringify(excalidrawFile, null, 2), "utf-8"),
+    writeFile(svgPath, toSvg(excalidrawFile), "utf-8"),
+  ]);
+
+  console.error(`[create_diagram] saved ${filePath} + ${svgPath} (${elements.length} elements)`);
+  return { filePath, svgPath, elementCount: elements.length };
 }

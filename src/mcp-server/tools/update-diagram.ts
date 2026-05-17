@@ -1,13 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { readFile, writeFile } from "fs/promises";
+import { extname, join, dirname, basename } from "path";
 import { diagramResponseSchema } from "../../agent/schema.js";
 import { UPDATE_SYSTEM_PROMPT } from "../../agent/prompts.js";
-import {
-  buildExcalidrawFile,
-  withDefaults,
-  type ExcalidrawElement,
-  type ExcalidrawFile,
-} from "../../utils/excalidraw.js";
+import { buildExcalidrawFile, type ExcalidrawFile } from "../../utils/excalidraw.js";
+import { generateWithRetry } from "../../utils/generate-with-retry.js";
+import { toSvg } from "../../utils/svg.js";
 
 export interface UpdateDiagramInput {
   filePath: string;
@@ -16,6 +14,7 @@ export interface UpdateDiagramInput {
 
 export interface UpdateDiagramOutput {
   filePath: string;
+  svgPath: string;
 }
 
 export async function updateDiagram({
@@ -45,17 +44,18 @@ export async function updateDiagram({
     `Changes requested: ${changes}`,
   ].join("\n");
 
-  const result = await model.generateContent(prompt);
-  const parsed = JSON.parse(result.response.text()) as {
-    elements: Partial<ExcalidrawElement>[];
-  };
+  const elements = await generateWithRetry(model, prompt, "[update_diagram]");
 
-  const elements = parsed.elements.map((el) =>
-    withDefaults(el as Parameters<typeof withDefaults>[0])
-  );
+  const excalidrawFile = buildExcalidrawFile(elements);
+  const dir = dirname(filePath);
+  const base = basename(filePath, extname(filePath));
+  const svgPath = join(dir, `${base}.svg`);
 
-  await writeFile(filePath, JSON.stringify(buildExcalidrawFile(elements), null, 2), "utf-8");
+  await Promise.all([
+    writeFile(filePath, JSON.stringify(excalidrawFile, null, 2), "utf-8"),
+    writeFile(svgPath, toSvg(excalidrawFile), "utf-8"),
+  ]);
 
-  console.error(`[update_diagram] updated ${filePath} (${elements.length} elements)`);
-  return { filePath };
+  console.error(`[update_diagram] updated ${filePath} + ${svgPath} (${elements.length} elements)`);
+  return { filePath, svgPath };
 }

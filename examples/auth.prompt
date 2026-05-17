@@ -1,0 +1,13 @@
+An OAuth2 / JWT authentication flow. Style: flowchart.
+
+Steps:
+1. User clicks "Login" on the Client App
+2. Client redirects to Auth Server with client_id and redirect_uri
+3. User enters credentials on Auth Server login page
+4. Auth Server validates credentials against User Database
+5. If valid: Auth Server issues Authorization Code, redirects back to Client
+6. If invalid: show error, return to step 3
+7. Client exchanges Authorization Code for Access Token + Refresh Token via Auth Server
+8. Client stores tokens and makes API requests with Authorization: Bearer <token>
+9. Resource Server validates token with Auth Server, returns protected resource
+10. When Access Token expires: Client uses Refresh Token to get a new Access Token

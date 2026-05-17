@@ -1,0 +1,14 @@
+A CI/CD pipeline diagram. Style: flowchart.
+
+Pipeline stages triggered by a git push:
+1. Developer pushes code to GitHub (feature branch)
+2. GitHub Actions triggers the pipeline
+3. Stage 1 — Build: install dependencies, compile TypeScript, check for errors
+4. Stage 2 — Test: run unit tests, integration tests, generate coverage report
+5. If tests fail: notify developer via Slack/email, pipeline stops
+6. Stage 3 — Docker Build: build Docker image, tag with commit SHA
+7. Stage 4 — Push: push image to Container Registry (e.g. AWS ECR or Docker Hub)
+8. Stage 5 — Deploy to Staging: update Kubernetes deployment in staging namespace
+9. Stage 6 — Smoke Test: run automated smoke tests against staging environment
+10. If smoke tests pass: Deploy to Production (rolling update in k8s)
+11. Monitor: send success notification, update deployment dashboard

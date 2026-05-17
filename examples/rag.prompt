@@ -1,0 +1,11 @@
+A RAG (Retrieval-Augmented Generation) pipeline. Style: architecture.
+
+Components and flow:
+1. User submits a query
+2. Query goes to an Embedding Model to generate a query vector
+3. Query vector is sent to a Vector Store (e.g. Pinecone) which returns top-k relevant chunks
+4. Retrieved chunks plus the original query are passed to an LLM (e.g. GPT-4)
+5. LLM generates a final answer returned to the User
+
+Offline ingestion path (shown separately below the main flow):
+- PDF / Documents → Text Chunker → Embedding Model → Vector Store

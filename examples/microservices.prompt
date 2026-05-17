@@ -1,0 +1,10 @@
+A microservices architecture diagram. Style: architecture.
+
+Services and connections:
+- Client (browser/mobile) sends requests to an API Gateway
+- API Gateway routes to three backend services: User Service, Order Service, and Product Service
+- User Service reads/writes from a Users Database (PostgreSQL)
+- Order Service reads/writes from an Orders Database (PostgreSQL) and publishes events to a Message Queue (RabbitMQ)
+- Product Service reads/writes from a Products Database (MongoDB)
+- A Notification Service subscribes to the Message Queue and sends emails/push notifications
+- All services emit logs to a centralized Logging Service
