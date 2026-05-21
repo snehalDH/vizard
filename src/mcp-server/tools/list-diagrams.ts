@@ -6,12 +6,13 @@ export interface ListDiagramsOutput {
 }
 
 export async function listDiagrams(): Promise<ListDiagramsOutput> {
-  await mkdir("diagrams", { recursive: true });
-  const files = await readdir("diagrams");
+  const outputDir = process.env.OUTPUT_DIR ?? join(process.cwd(), "diagrams");
+  await mkdir(outputDir, { recursive: true });
+  const files = await readdir(outputDir);
   const diagrams = files
     .filter((f) => f.endsWith(".excalidraw"))
     .sort()
-    .map((f) => join("diagrams", f));
+    .map((f) => join(outputDir, f));
 
   console.error(`[list_diagrams] found ${diagrams.length} diagrams`);
   return { diagrams };

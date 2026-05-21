@@ -48,10 +48,11 @@ export async function createDiagram({
   const prompt = `Style: ${style}\n\n${description}`;
   const elements = await generateWithRetry(model, prompt, "[create_diagram]");
 
-  await mkdir("diagrams", { recursive: true });
+  const outputDir = process.env.OUTPUT_DIR ?? join(process.cwd(), "diagrams");
+  await mkdir(outputDir, { recursive: true });
   const base = `${slugify(description)}-${Date.now()}`;
-  const filePath = join("diagrams", `${base}.excalidraw`);
-  const svgPath = join("diagrams", `${base}.svg`);
+  const filePath = join(outputDir, `${base}.excalidraw`);
+  const svgPath = join(outputDir, `${base}.svg`);
 
   const excalidrawFile = buildExcalidrawFile(elements);
   await Promise.all([
