@@ -143,4 +143,12 @@ program
     }
   });
 
+program
+  .command("mcp")
+  .description("Start vizard as an MCP server over stdio")
+  .action(async () => {
+    const { startMcpServer } = await import("./mcp-server/index.js");
+    await startMcpServer();
+  });
+
 program.parse();
