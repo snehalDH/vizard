@@ -3,3 +3,4 @@ dist/
 diagrams/
 .env
 *.js.map
+docs/
