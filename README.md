@@ -12,7 +12,18 @@ Vizard is a CLI tool and MCP server that turns natural-language descriptions int
 
 A vizard is a visualization wizard — you describe a system in plain English and it conjures the diagram for you. No drawing, no diagram syntax, no fiddling with boxes and arrows. Just describe it, and it appears.
 
-There's also an archaic meaning: a *vizard* is a mask or visor — something that gives shape and form to the abstract. That's exactly what this tool does: it takes invisible, conceptual architecture and gives it a visual face.
+There's also an archaic meaning: a _vizard_ is a mask or visor — something that gives shape and form to the abstract. That's exactly what this tool does: it takes invisible, conceptual architecture and gives it a visual face.
+
+---
+
+## Two Ways to Use Vizard
+
+| Mode           | How                                                      | Best for                                           |
+| -------------- | -------------------------------------------------------- | -------------------------------------------------- |
+| **CLI**        | Run `vizard` commands in your terminal                   | One-off diagrams, scripting, quick iteration       |
+| **MCP Server** | Connect Vizard to Claude Code, Cursor, or any MCP client | Generating diagrams directly from AI conversations |
+
+Both modes use the same Gemini-powered engine under the hood, the only difference is how you talk to it.
 
 ---
 
@@ -124,11 +135,11 @@ npm run mcp:server
 
 The server communicates over stdio and registers three tools:
 
-| Tool | Description |
-|------|-------------|
-| `create_diagram` | Generate a new diagram from a plain-English description |
+| Tool             | Description                                                      |
+| ---------------- | ---------------------------------------------------------------- |
+| `create_diagram` | Generate a new diagram from a plain-English description          |
 | `update_diagram` | Modify an existing `.excalidraw` file with plain-English changes |
-| `list_diagrams` | List all saved diagrams in the `diagrams/` directory |
+| `list_diagrams`  | List all saved diagrams in the `diagrams/` directory             |
 
 ### Connect from Claude Code
 
@@ -151,23 +162,23 @@ Once connected, you can ask Claude to draw diagrams and they will be created usi
 
 ## Diagram Styles
 
-| Style | Best for |
-|-------|----------|
+| Style          | Best for                                                            |
+| -------------- | ------------------------------------------------------------------- |
 | `architecture` | System components, cloud infrastructure, service topology (default) |
-| `flowchart` | Process steps, decision branches, user flows |
-| `sequence` | Actor interactions, API request/response, swim lanes |
+| `flowchart`    | Process steps, decision branches, user flows                        |
+| `sequence`     | Actor interactions, API request/response, swim lanes                |
 
 ---
 
 ## Example Prompts
 
-| Prompt | What you get |
-|--------|-------------|
-| `"OAuth2 login flow: user, browser, auth server, resource server"` | 4-actor sequence with token exchange |
-| `"CI/CD pipeline: GitHub push → build → test → Docker image → deploy to k8s"` | Left-to-right pipeline with stage labels |
-| `"Multi-agent system: orchestrator spawns web, academic, and social agents feeding a synthesizer"` | Hub-and-spoke agent topology |
-| `"E-commerce checkout: cart, payment gateway, inventory, order confirmation, email"` | Linear flowchart with parallel branches |
-| `"WebSocket chat: client, load balancer, two server nodes, Redis pub/sub, database"` | Infrastructure architecture diagram |
+| Prompt                                                                                             | What you get                             |
+| -------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `"OAuth2 login flow: user, browser, auth server, resource server"`                                 | 4-actor sequence with token exchange     |
+| `"CI/CD pipeline: GitHub push → build → test → Docker image → deploy to k8s"`                      | Left-to-right pipeline with stage labels |
+| `"Multi-agent system: orchestrator spawns web, academic, and social agents feeding a synthesizer"` | Hub-and-spoke agent topology             |
+| `"E-commerce checkout: cart, payment gateway, inventory, order confirmation, email"`               | Linear flowchart with parallel branches  |
+| `"WebSocket chat: client, load balancer, two server nodes, Redis pub/sub, database"`               | Infrastructure architecture diagram      |
 
 ---
 
