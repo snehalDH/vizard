@@ -6,6 +6,16 @@ Vizard is a CLI tool and MCP server that turns natural-language descriptions int
 
 ---
 
+## Why "Vizard"?
+
+**Vizard** = **Viz** (visualization) + **Wizard** (AI magic).
+
+A vizard is a visualization wizard — you describe a system in plain English and it conjures the diagram for you. No drawing, no diagram syntax, no fiddling with boxes and arrows. Just describe it, and it appears.
+
+There's also an archaic meaning: a *vizard* is a mask or visor — something that gives shape and form to the abstract. That's exactly what this tool does: it takes invisible, conceptual architecture and gives it a visual face.
+
+---
+
 ## Features
 
 - **Plain-English input** — describe any system or process, no diagram syntax to learn
