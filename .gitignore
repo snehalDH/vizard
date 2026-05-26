@@ -4,3 +4,4 @@ diagrams/
 .env
 *.js.map
 docs/
+blogs/
